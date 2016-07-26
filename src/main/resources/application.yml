@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/second
+    username: root
+    password:
+    test-while-idle: true
+    validation-query: SELECT 1
+  jpa:
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.ImprovedNamingStrategy
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5Dialect
+multipart:
+  maxFileSize: 128KB
+  maxRequestSize: 128KB
+server:
+  port: 8080
+yibanoauth:
+  second:
+    APPID: "a2fdb91816803444"
+    APPkey: "4fbee5b53c1e231f20c7df53f22618c3"
