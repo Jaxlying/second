@@ -36,4 +36,5 @@ public class Admin {
     public void setYibanid(int yibanid) {
         this.yibanid = yibanid;
     }
+    public  Admin(){}
 }

@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import yb.upc.edu.cn.dto.JsonMes;
+import yb.upc.edu.cn.dto.YibanBasicUserInfo;
 import yb.upc.edu.cn.model.Publish;
 import yb.upc.edu.cn.model.User;
 import yb.upc.edu.cn.repository.PublishRepository;
@@ -105,7 +106,7 @@ public class PublishController {
     }
 
 
-    @RequestMapping(method = RequestMethod.POST, value = "/edit")
+    @RequestMapping(method = RequestMethod.POST, value = "publish/edit")
     public Object edit(@RequestParam("file") MultipartFile file,
                           RedirectAttributes redirectAttributes, String title, String detail, String qq,String telephone, String price, String species,String degree,int publishiid,int isdeal) {
 
@@ -126,7 +127,20 @@ public class PublishController {
         System.out.println(user.getId());
         Publish publish = publishRepository.findOne(publishiid);
         publish.updata("http://localhost:8080/second/" + imgname,title,detail,qq,telephone,price,species,degree,isdeal);
-        return new JsonMes(1,"发布成功");
+        return new JsonMes(1,"编辑成功");
     }
 
+    @RequestMapping("publish/delete")
+    public Object delete(int id){
+        Publish publish = publishRepository.findOne(id);
+        publish.delete();
+        publishRepository.save(publish);
+        return new JsonMes(1,"删除成功");
+    }
+
+    @RequestMapping("/publish/self")
+    public Object findSelfPublish(){
+        YibanBasicUserInfo yibanBasicUserInfo = (YibanBasicUserInfo)httpSession.getAttribute("user");
+        return publishRepository.findByYbidAndIsdelete(yibanBasicUserInfo.visit_user.userid,false);
+    }
 }

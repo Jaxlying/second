@@ -20,6 +20,7 @@ public class Review {
     private int publishid;
     private int reviewid;
     private String detail;
+    private int ybid;
 
     private String createtime;
     private String updatatime;
@@ -27,10 +28,11 @@ public class Review {
 
     public Review(){}
 
-    public Review(int publishid, int reviewid, String detail) {
+    public Review(int publishid, int reviewid, String detail,int ybid) {
         this.publishid = publishid;
         this.reviewid = reviewid;
         this.detail = detail;
+        this.ybid = ybid;
         this.createtime = new Date().toString();
         this.updatatime = new Date().toString();
     }
@@ -89,5 +91,13 @@ public class Review {
 
     public void setIsdelete(boolean isdelete) {
         this.isdelete = isdelete;
+    }
+
+    public int getYbid() {
+        return ybid;
+    }
+
+    public void setYbid(int ybid) {
+        this.ybid = ybid;
     }
 }

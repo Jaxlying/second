@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import yb.upc.edu.cn.dto.YibanBasicUserInfo;
+import yb.upc.edu.cn.dto.YibanOtherInfo;
 import yb.upc.edu.cn.dto.YibanUserInfo;
 
 import javax.servlet.http.HttpSession;
@@ -23,6 +24,26 @@ public class YbInterfaceService {
 
     @Autowired
     private HttpSession httpSession;
+
+    public YibanOtherInfo getOtherInfo(int id) throws IOException {
+        String access_token = ((YibanBasicUserInfo)httpSession.getAttribute("user")).visit_oauth.access_token;
+        String url = "https://openapi.yiban.cn/user/other?access_token=";
+        String charset = "UTF-8";
+        URLConnection connection = new URL(url + access_token + "&yb_userid=" + id).openConnection();
+        connection.setRequestProperty("Accept-Charset",charset);
+        InputStream response = connection.getInputStream();
+        StringBuilder sb=new StringBuilder();
+        BufferedReader br = new BufferedReader(new InputStreamReader(response));
+        String read;
+        while((read=br.readLine()) != null) {
+            sb.append(read);
+        }
+        br.close();
+        Gson gson = new Gson();
+        YibanOtherInfo yibanOtherInfo = gson.fromJson(sb.toString(),YibanOtherInfo.class);
+        System.out.println(sb.toString());
+        return  yibanOtherInfo;
+    }
 
     public YibanUserInfo getYbUserInfo() throws IOException {
         String access_token = ((YibanBasicUserInfo)httpSession.getAttribute("user")).visit_oauth.access_token;

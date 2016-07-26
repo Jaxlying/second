@@ -8,6 +8,7 @@ import yb.upc.edu.cn.dto.YibanBasicUserInfo;
 import yb.upc.edu.cn.model.User;
 import yb.upc.edu.cn.repository.UserRepository;
 import yb.upc.edu.cn.service.UserService;
+import yb.upc.edu.cn.service.YbInterfaceService;
 
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
@@ -29,6 +30,9 @@ public class UserController {
     @Autowired
     private HttpSession httpSession;
 
+    @Autowired
+    private YbInterfaceService ybInterfaceService;
+
     @RequestMapping("/getuserinfo")
     @JsonIgnore
     public Object getUserInforMation() throws IOException {
@@ -42,5 +46,10 @@ public class UserController {
         } else {
             return userService.registe();
         }
+    }
+
+    @RequestMapping("/user/other")
+    public Object getOther(int id) throws IOException {
+        return ybInterfaceService.getOtherInfo(id);
     }
 }
