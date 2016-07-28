@@ -29,8 +29,9 @@ public class UserService {
     public boolean isOurUser(){
         YibanBasicUserInfo user = (YibanBasicUserInfo)httpSession.getAttribute("user");
         int Yibanid = user.visit_user.userid;
+        System.out.println(Yibanid);
         User users = userRepository.findByUserid(Yibanid);
-        if (users==null){
+        if (users == null){
             return false;
         }else {
             return true;

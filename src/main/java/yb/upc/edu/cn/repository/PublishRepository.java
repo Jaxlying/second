@@ -8,6 +8,7 @@ import yb.upc.edu.cn.model.Publish;
  */
 public interface PublishRepository extends CrudRepository<Publish,Integer> {
     public Iterable<Publish> findByIsdelete(boolean isdelete);
+    public Iterable<Publish> findByIsdeleteOrderByCreatetimeDesc(boolean isdelete);
     public Iterable<Publish> findByYbidAndIsdelete(int ybid,boolean isdelete);
 
 

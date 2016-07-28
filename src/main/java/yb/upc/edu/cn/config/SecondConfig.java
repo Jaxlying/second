@@ -15,4 +15,11 @@ public class SecondConfig {
     @Value("${yibanoauth.second.APPkey}")
     public String appkey;
 
+    @Value("${yibanoauth.frontend}")
+    public String fontend;
+
+    @Value("${yibanoauth.imgserver}")
+    public String imgserver;
+
+
 }

@@ -14,11 +14,13 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL5Dialect
 multipart:
-  maxFileSize: 128KB
-  maxRequestSize: 128KB
+  maxFileSize: 12800KB
+  maxRequestSize: 12800KB
 server:
   port: 8080
 yibanoauth:
   second:
-    APPID: "a2fdb91816803444"
-    APPkey: "4fbee5b53c1e231f20c7df53f22618c3"
+    APPID: "d3e9e3722272dc94"
+    APPkey: "202f365322d008bab2f76d5eea1bfb15"
+  frontend: "http://localhost:4000"
+  imgserver: "http://localhost:8080"

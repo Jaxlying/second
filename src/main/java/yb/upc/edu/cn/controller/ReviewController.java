@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import yb.upc.edu.cn.dto.JsonMes;
 import yb.upc.edu.cn.dto.YibanBasicUserInfo;
 import yb.upc.edu.cn.model.Review;
+import yb.upc.edu.cn.model.User;
 import yb.upc.edu.cn.repository.ReviewRepository;
 
 import javax.servlet.http.HttpSession;
@@ -37,7 +38,8 @@ public class ReviewController {
     public Object doReview(int publishid, @RequestParam(value = "reviweid", defaultValue = "0")int reviewid,String detail){
         YibanBasicUserInfo yibanBasicUserInfo = (YibanBasicUserInfo)httpSession.getAttribute("user");
         if(yibanBasicUserInfo==null) return new JsonMes(-1,"你还没有登陆");
-        Review review = new Review(publishid,reviewid,detail,yibanBasicUserInfo.visit_user.userid);
+        User user = (User)httpSession.getAttribute("ouruser");
+        Review review = new Review(publishid,reviewid,detail,user.getUserid(),user.getUsername(),user.getYbhead());
         revisionRepository.save(review);
         return new JsonMes(1,"评论成功");
     }

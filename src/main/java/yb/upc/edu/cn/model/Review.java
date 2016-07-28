@@ -21,6 +21,8 @@ public class Review {
     private int reviewid;
     private String detail;
     private int ybid;
+    private String ybname;
+    private String ybhead;
 
     private String createtime;
     private String updatatime;
@@ -28,13 +30,31 @@ public class Review {
 
     public Review(){}
 
-    public Review(int publishid, int reviewid, String detail,int ybid) {
+    public Review(int publishid, int reviewid, String detail,int ybid,String ybname,String ybhead) {
         this.publishid = publishid;
         this.reviewid = reviewid;
         this.detail = detail;
         this.ybid = ybid;
+        this.ybname = ybname;
+        this.ybhead = ybhead;
         this.createtime = new Date().toString();
         this.updatatime = new Date().toString();
+    }
+
+    public String getYbname() {
+        return ybname;
+    }
+
+    public void setYbname(String ybname) {
+        this.ybname = ybname;
+    }
+
+    public String getYbhead() {
+        return ybhead;
+    }
+
+    public void setYbhead(String ybhead) {
+        this.ybhead = ybhead;
     }
 
     public int getId() {

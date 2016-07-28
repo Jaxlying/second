@@ -10,6 +10,8 @@ import org.springframework.test.context.web.WebAppConfiguration;
 import yb.upc.edu.cn.auth.YibanOAuth;
 import yb.upc.edu.cn.config.SecondConfig;
 import yb.upc.edu.cn.dto.YibanBasicUserInfo;
+import yb.upc.edu.cn.model.Review;
+import yb.upc.edu.cn.repository.ReviewRepository;
 import yb.upc.edu.cn.service.YbInterfaceService;
 
 import javax.servlet.http.HttpSession;
@@ -22,6 +24,16 @@ public class SecondApplicationTests {
 
 	@Test
 	public void contextLoads() {
+	}
+
+	@Autowired
+	private ReviewRepository reviewRepository;
+
+	@Test
+	public void testPublish(){
+		Review review = new Review(1,2,"操",1,"曹操","操");
+		reviewRepository.save(review);
+
 	}
 
 }

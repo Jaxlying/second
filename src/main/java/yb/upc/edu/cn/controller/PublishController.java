@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import yb.upc.edu.cn.config.SecondConfig;
 import yb.upc.edu.cn.dto.JsonMes;
 import yb.upc.edu.cn.dto.YibanBasicUserInfo;
 import yb.upc.edu.cn.model.Publish;
@@ -33,6 +34,9 @@ public class PublishController {
     private final ResourceLoader resourceLoader;
 
     @Autowired
+    private SecondConfig secondConfig;
+
+    @Autowired
     public PublishController(ResourceLoader resourceLoader) {
         this.resourceLoader = resourceLoader;
     }
@@ -45,7 +49,7 @@ public class PublishController {
 
     @RequestMapping("/getallpublish")
     public Object getAllPublish(){
-        return publishRepository.findByIsdelete(false);
+        return publishRepository.findByIsdeleteOrderByCreatetimeDesc(false);
     }
     @RequestMapping(value = "/publishfindone",method = RequestMethod.GET)
     public Object findOne(int id) {
@@ -68,44 +72,6 @@ public class PublishController {
         }
     }
 
-    /**
-     * 发布
-     * @param file
-     * @param redirectAttributes
-     * @param title
-     * @param detail
-     * @param qq
-     * @param telephone
-     * @param price
-     * @param species
-     * @param degree
-     * @return
-     */
-    @RequestMapping(method = RequestMethod.POST, value = "/publish")
-    public Object publish(@RequestParam("file") MultipartFile file,
-                                   RedirectAttributes redirectAttributes, String title, String detail, String qq,String telephone, String price, String species,String degree) {
-
-        String imgname = new String();
-        if (!file.isEmpty()) {
-            try {
-                imgname = System.currentTimeMillis() + file.getOriginalFilename();
-                System.out.println(Paths.get(ROOT));
-                Files.copy(file.getInputStream(), Paths.get(ROOT,imgname));
-            } catch (IOException |RuntimeException e) {
-                redirectAttributes.addFlashAttribute("message", "Failued to upload " + file.getOriginalFilename() + " => " + e.getMessage());
-            }
-        } else {
-            redirectAttributes.addFlashAttribute("message", "Failed to upload " + file.getOriginalFilename() + " because it was empty");
-        }
-        System.out.println(imgname);
-        User user = (User) httpSession.getAttribute("ouruser");
-        System.out.println(user.getId());
-        Publish publish = new Publish("http://localhost:8080/second/" + imgname,title,detail,qq,telephone,price,species,degree,user.getUserid(),user.getUsername(),user.getYbhead());
-        publishRepository.save(publish);
-        return new JsonMes(1,"发布成功");
-    }
-
-
     @RequestMapping(method = RequestMethod.POST, value = "publish/edit")
     public Object edit(@RequestParam("file") MultipartFile file,
                           RedirectAttributes redirectAttributes, String title, String detail, String qq,String telephone, String price, String species,String degree,int publishiid,int isdeal) {
@@ -114,7 +80,6 @@ public class PublishController {
         if (!file.isEmpty()) {
             try {
                 imgname = System.currentTimeMillis() + file.getOriginalFilename();
-                System.out.println(Paths.get(ROOT));
                 Files.copy(file.getInputStream(), Paths.get(ROOT,imgname));
             } catch (IOException |RuntimeException e) {
                 redirectAttributes.addFlashAttribute("message", "Failued to upload " + file.getOriginalFilename() + " => " + e.getMessage());
@@ -122,11 +87,10 @@ public class PublishController {
         } else {
             redirectAttributes.addFlashAttribute("message", "Failed to upload " + file.getOriginalFilename() + " because it was empty");
         }
-        System.out.println(imgname);
         User user = (User) httpSession.getAttribute("ouruser");
         System.out.println(user.getId());
         Publish publish = publishRepository.findOne(publishiid);
-        publish.updata("http://localhost:8080/second/" + imgname,title,detail,qq,telephone,price,species,degree,isdeal);
+        publish.updata(secondConfig.imgserver + "/second/" + imgname,title,detail,qq,telephone,price,species,degree,isdeal);
         return new JsonMes(1,"编辑成功");
     }
 
@@ -140,7 +104,12 @@ public class PublishController {
 
     @RequestMapping("/publish/self")
     public Object findSelfPublish(){
-        YibanBasicUserInfo yibanBasicUserInfo = (YibanBasicUserInfo)httpSession.getAttribute("user");
-        return publishRepository.findByYbidAndIsdelete(yibanBasicUserInfo.visit_user.userid,false);
+//        YibanBasicUserInfo yibanBasicUserInfo = (YibanBasicUserInfo)httpSession.getAttribute("user");
+//        if(yibanBasicUserInfo==null) return new JsonMes(-1,"你还没有登陆");
+//        System.out.println(yibanBasicUserInfo.visit_user.userid);
+        User user = (User)httpSession.getAttribute("ouruser");
+//        return publishRepository.findByYbidAndIsdelete(yibanBasicUserInfo.visit_user.userid,false);
+        System.out.println(user.getUserid());
+        return publishRepository.findByYbidAndIsdelete(user.getUserid(),false);
     }
 }
